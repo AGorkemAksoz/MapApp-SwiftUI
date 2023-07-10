@@ -114,3 +114,38 @@ extension MKMapItem {
         return addressString
     }
 }
+
+
+
+struct MapViewContainer: UIViewRepresentable {
+    
+    var annotations = [MKPointAnnotation]()
+    
+    let mapView = MKMapView()
+    
+    // treat this as your setup area
+    func makeUIView(context: Context) -> MKMapView {
+        
+        setupRegionForMap()
+        return mapView
+    }
+    
+    fileprivate func setupRegionForMap() {
+        let centerCoordinate = CLLocationCoordinate2D(latitude: 37.7666, longitude: -122.427290)
+        let span = MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
+        let region = MKCoordinateRegion(center: centerCoordinate, span: span)
+        mapView.setRegion(region, animated: true)
+    }
+    
+    func updateUIView(_ uiView: MKMapView, context: Context) {
+        
+        uiView.removeAnnotations(uiView.annotations)
+        uiView.addAnnotations(annotations)
+        uiView.showAnnotations(uiView.annotations, animated: true)
+        
+    }
+    
+    typealias UIViewType = MKMapView
+    
+    
+}
