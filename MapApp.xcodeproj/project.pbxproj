@@ -11,6 +11,8 @@
 		DD956EC92A5AF3A500A6E319 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD956EC82A5AF3A500A6E319 /* ContentView.swift */; };
 		DD956ECB2A5AF3A700A6E319 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DD956ECA2A5AF3A700A6E319 /* Assets.xcassets */; };
 		DD956ECE2A5AF3A700A6E319 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DD956ECD2A5AF3A700A6E319 /* Preview Assets.xcassets */; };
+		DE2AF2B12A5BEE9500B7A1AB /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE2AF2B02A5BEE9500B7A1AB /* MapView.swift */; };
+		DE2AF2B42A5BF7A100B7A1AB /* LBTATools in Frameworks */ = {isa = PBXBuildFile; productRef = DE2AF2B32A5BF7A100B7A1AB /* LBTATools */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +21,7 @@
 		DD956EC82A5AF3A500A6E319 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		DD956ECA2A5AF3A700A6E319 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DD956ECD2A5AF3A700A6E319 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		DE2AF2B02A5BEE9500B7A1AB /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -26,6 +29,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DE2AF2B42A5BF7A100B7A1AB /* LBTATools in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -55,6 +59,7 @@
 				DD956EC82A5AF3A500A6E319 /* ContentView.swift */,
 				DD956ECA2A5AF3A700A6E319 /* Assets.xcassets */,
 				DD956ECC2A5AF3A700A6E319 /* Preview Content */,
+				DE2AF2B02A5BEE9500B7A1AB /* MapView.swift */,
 			);
 			path = MapApp;
 			sourceTree = "<group>";
@@ -83,6 +88,9 @@
 			dependencies = (
 			);
 			name = MapApp;
+			packageProductDependencies = (
+				DE2AF2B32A5BF7A100B7A1AB /* LBTATools */,
+			);
 			productName = MapApp;
 			productReference = DD956EC32A5AF3A500A6E319 /* MapApp.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +119,9 @@
 				Base,
 			);
 			mainGroup = DD956EBA2A5AF3A500A6E319;
+			packageReferences = (
+				DE2AF2B22A5BF7A100B7A1AB /* XCRemoteSwiftPackageReference "LBTATools" */,
+			);
 			productRefGroup = DD956EC42A5AF3A500A6E319 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -138,6 +149,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DD956EC92A5AF3A500A6E319 /* ContentView.swift in Sources */,
+				DE2AF2B12A5BEE9500B7A1AB /* MapView.swift in Sources */,
 				DD956EC72A5AF3A500A6E319 /* MapAppApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -339,6 +351,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		DE2AF2B22A5BF7A100B7A1AB /* XCRemoteSwiftPackageReference "LBTATools" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/bhlvoong/LBTATools";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		DE2AF2B32A5BF7A100B7A1AB /* LBTATools */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DE2AF2B22A5BF7A100B7A1AB /* XCRemoteSwiftPackageReference "LBTATools" */;
+			productName = LBTATools;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = DD956EBB2A5AF3A500A6E319 /* Project object */;
 }
