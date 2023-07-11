@@ -41,6 +41,8 @@ struct MapViewContainer: UIViewRepresentable {
     
     var annotations = [MKPointAnnotation]()
     var selectedMapItem: MKMapItem?
+    var currentLocation = CLLocationCoordinate2D(latitude: 37.7666, longitude: -122.427290)
+    
     
     let mapView = MKMapView()
     
@@ -52,10 +54,20 @@ struct MapViewContainer: UIViewRepresentable {
         }
         
         func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+            
+            if !(annotation is MKPointAnnotation) { return nil }
+            
             let pinAnnotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "id")
             pinAnnotationView.canShowCallout = true
             return pinAnnotationView
         }
+        
+        func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+//            print(mapView.region)
+            NotificationCenter.default.post(name: MapViewContainer.Coordinator.regionChangeNotification, object: mapView.region)
+        }
+        
+        static let regionChangeNotification = NSNotification.Name("regionChangeNotification")
     }
     
     func makeCoordinator() -> Coordinator {
@@ -65,7 +77,7 @@ struct MapViewContainer: UIViewRepresentable {
     // treat this as your setup area
     func makeUIView(context: Context) -> MKMapView {
         
-        
+        mapView.showsUserLocation = true
         setupRegionForMap()
         return mapView
     }
@@ -80,17 +92,46 @@ struct MapViewContainer: UIViewRepresentable {
     
     func updateUIView(_ uiView: MKMapView, context: Context) {
         
-        uiView.removeAnnotations(uiView.annotations)
-        uiView.addAnnotations(annotations)
-        uiView.showAnnotations(uiView.annotations, animated: true)
+
         
-        uiView.annotations.forEach { annotation in
+        if annotations.count == 0 {
+            
+            // setting up the map to current location
+            let span = MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
+            let region = MKCoordinateRegion(center: currentLocation, span: span)
+            
+            uiView.setRegion(region, animated: true)
+            
+            uiView.removeAnnotations(uiView.annotations)
+            return
+        }
+        
+        if shouldRefreshAnnotations(mapView: uiView) {
+            uiView.removeAnnotations(uiView.annotations)
+            uiView.addAnnotations(annotations)
+            uiView.showAnnotations(uiView.annotations.filter({$0 is MKPointAnnotation
+                
+            }), animated: false)
+        }
+        
+        uiView.annotations.forEach { (annotation) in
             if annotation.title == selectedMapItem?.name {
                 uiView.selectAnnotation(annotation, animated: true)
             }
         }
-        
     }
+    
+    // This checks to see whether or not annotations have changed.  The algorithm generates a hashmap/dictionary for all the annotations and then goes through the map to check if they exist. If it doesn't currently exist, we treat this as a need to refresh the map
+    fileprivate func shouldRefreshAnnotations(mapView: MKMapView) -> Bool {
+        let grouped = Dictionary(grouping: mapView.annotations, by: { $0.title ?? ""})
+        for (_, annotation) in annotations.enumerated() {
+            if grouped[annotation.title ?? ""] == nil {
+                return true
+            }
+        }
+        return false
+    }
+
     
     typealias UIViewType = MKMapView
     
