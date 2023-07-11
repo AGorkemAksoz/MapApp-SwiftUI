@@ -59,10 +59,10 @@
 			children = (
 				DD956EC62A5AF3A500A6E319 /* MapAppApp.swift */,
 				DD956EC82A5AF3A500A6E319 /* ContentView.swift */,
-				DD956ECA2A5AF3A700A6E319 /* Assets.xcassets */,
-				DD956ECC2A5AF3A700A6E319 /* Preview Content */,
 				DE2AF2B02A5BEE9500B7A1AB /* MapView.swift */,
 				DE2AF2B52A5C4B1C00B7A1AB /* MapSearchingViewModel.swift */,
+				DD956ECA2A5AF3A700A6E319 /* Assets.xcassets */,
+				DD956ECC2A5AF3A700A6E319 /* Preview Content */,
 			);
 			path = MapApp;
 			sourceTree = "<group>";
@@ -291,6 +291,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -320,6 +321,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
