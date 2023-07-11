@@ -15,7 +15,7 @@ struct ContentView: View {
     var body: some View {
         ZStack(alignment: .top) {
             
-            MapViewContainer(annotations: viewModel.annotations, selectedMapItem: viewModel.selectedMapItem)
+            MapViewContainer(annotations: viewModel.annotations, selectedMapItem: viewModel.selectedMapItem, currentLocation: viewModel.currentLocation)
                 .edgesIgnoringSafeArea(.all)
             
             VStack(spacing: 12) {
@@ -23,9 +23,11 @@ struct ContentView: View {
                     TextField("Search for places", text: $viewModel.searchQuery, onCommit: {
                         UIApplication.shared.keyWindow?.endEditing(true)
                     })
+                    .foregroundColor(.black)
                         .padding(.horizontal, 16)
                         .padding(.vertical, 12 )
                         .background(Color.white)
+                        .autocorrectionDisabled()
                 }
                 .shadow(radius: 3)
                 .padding()
