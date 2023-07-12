@@ -15,8 +15,15 @@ struct ContentView: View {
     var body: some View {
         ZStack(alignment: .top) {
             
-            MapViewContainer(annotations: viewModel.annotations, selectedMapItem: viewModel.selectedMapItem, currentLocation: viewModel.currentLocation)
+            MapViewContainer(annotations: viewModel.annotations, selectedMapItem: viewModel.selectedMapItem, currentLocation: viewModel.currentLocation, searchQuery: viewModel.searchQuery)
                 .edgesIgnoringSafeArea(.all)
+                .gesture(
+                    DragGesture()
+                        .onChanged({ newValue in
+                            print("*** NewValue \(newValue)")
+                            viewModel.selectedMapItem?.name = "New"
+                        })
+                )
             
             VStack(spacing: 12) {
                 HStack {
@@ -38,31 +45,34 @@ struct ContentView: View {
                 
                 Spacer()
                 
-                ScrollView(.horizontal) {
-                    HStack(spacing: 16) {
-                        ForEach(viewModel.mapItmes, id: \.self) { item in
-                            Button(action: { 
-                                print(item.name ?? "")
-                                self.viewModel.selectedMapItem = item
-                            }, label: {
-                                VStack(alignment: .leading, spacing: 4) {
-                                    Text(item.name ?? "")
-                                        .font(.system(size: 18))
-                                        .fontWeight(.bold)
-                                    Text(item.placemark.title ?? "")
-                                }
-                            })
-                            .foregroundColor(.black)
-                            .padding()
-                            .frame(width: 200)
-                            .background(Color.white)
-                            .cornerRadius(5)
+                if viewModel.searchQuery.count > 3 {
+                    ScrollView(.horizontal) {
+                        HStack(spacing: 16) {
+                            ForEach(viewModel.mapItmes, id: \.self) { item in
+                                Button(action: {
+                                    print(item.name ?? "")
+                                    self.viewModel.selectedMapItem = item
+                                }, label: {
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        Text(item.name ?? "")
+                                            .font(.system(size: 18))
+                                            .fontWeight(.bold)
+                                        Text(item.placemark.title ?? "")
+                                    }
+                                })
+                                .foregroundColor(.black)
+                                .padding()
+                                .frame(width: 200)
+                                .background(Color.white)
+                                .cornerRadius(5)
+                            }
                         }
+                        .padding(.horizontal, 16)
+                        
                     }
-                    .padding(.horizontal, 16)
-                    
+                    .shadow(radius: 5)
+
                 }
-                .shadow(radius: 5)
             }
             .padding()
         }

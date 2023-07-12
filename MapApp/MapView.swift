@@ -8,40 +8,12 @@
 import MapKit
 import SwiftUI
 
-extension MKMapItem {
-    func address(_ mapItem: MKMapItem) -> String {
-        let placemark = mapItem.placemark
-        var addressString = ""
-        
-        if placemark.subThoroughfare != nil {
-            addressString = placemark.subThoroughfare! + " "
-        }
-        if placemark.thoroughfare != nil {
-            addressString += placemark.thoroughfare! + ", "
-        }
-        if placemark.postalCode != nil {
-            addressString += placemark.postalCode! + " "
-        }
-        if placemark.locality != nil {
-            addressString += placemark.locality! + ", "
-        }
-        if placemark.administrativeArea != nil {
-            addressString += placemark.administrativeArea! + " "
-        }
-        if placemark.country != nil {
-            addressString += placemark.country!
-        }
-        return addressString
-    }
-}
-
-
-
 struct MapViewContainer: UIViewRepresentable {
     
     var annotations = [MKPointAnnotation]()
     var selectedMapItem: MKMapItem?
     var currentLocation = CLLocationCoordinate2D(latitude: 37.7666, longitude: -122.427290)
+    var searchQuery: String?
     
     
     let mapView = MKMapView()
@@ -63,7 +35,7 @@ struct MapViewContainer: UIViewRepresentable {
         }
         
         func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-//            print(mapView.region)
+            print("****** \(mapView.region)")
             NotificationCenter.default.post(name: MapViewContainer.Coordinator.regionChangeNotification, object: mapView.region)
         }
         
@@ -85,17 +57,16 @@ struct MapViewContainer: UIViewRepresentable {
     
     fileprivate func setupRegionForMap() {
         let centerCoordinate = CLLocationCoordinate2D(latitude: 37.7666, longitude: -122.427290)
-        let span = MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
+        let span = MKCoordinateSpan(latitudeDelta: 0.025, longitudeDelta: 0.025)
         let region = MKCoordinateRegion(center: centerCoordinate, span: span)
         mapView.setRegion(region, animated: true)
     }
     
     func updateUIView(_ uiView: MKMapView, context: Context) {
         
-
-        
         if annotations.count == 0 {
             
+            print("*** Annotations count is \(annotations.count)")
             // setting up the map to current location
             let span = MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
             let region = MKCoordinateRegion(center: currentLocation, span: span)
@@ -105,19 +76,30 @@ struct MapViewContainer: UIViewRepresentable {
             uiView.removeAnnotations(uiView.annotations)
             return
         }
-        
-        if shouldRefreshAnnotations(mapView: uiView) {
-            uiView.removeAnnotations(uiView.annotations)
-            uiView.addAnnotations(annotations)
-            uiView.showAnnotations(uiView.annotations.filter({$0 is MKPointAnnotation
-                
-            }), animated: false)
-        }
-        
-        uiView.annotations.forEach { (annotation) in
-            if annotation.title == selectedMapItem?.name {
-                uiView.selectAnnotation(annotation, animated: true)
+
+        if let searchQuery = searchQuery, searchQuery.count >= 3 {
+            print("*** Search Query")
+                uiView.removeAnnotations(uiView.annotations)
+                uiView.addAnnotations(annotations)
+//                uiView.showAnnotations(uiView.annotations.filter({$0 is MKPointAnnotation}), animated: true)
+            
+            uiView.annotations.forEach { (annotation) in
+                if annotation.title == selectedMapItem?.name {
+                    print("*** Annotation \(annotations.count)")
+                    uiView.selectAnnotation(annotation, animated: true)
+                    withAnimation {
+                        uiView.region.center = (selectedMapItem?.placemark.coordinate)!
+                        
+                    }
+                }
             }
+            }
+        
+        
+
+        
+        if searchQuery?.count ?? 0 < 3 {
+            uiView.removeAnnotations(uiView.annotations)
         }
     }
     
@@ -131,9 +113,36 @@ struct MapViewContainer: UIViewRepresentable {
         }
         return false
     }
-
-    
-    typealias UIViewType = MKMapView
-    
     
 }
+
+
+
+/*
+ extension MKMapItem {
+     func address(_ mapItem: MKMapItem) -> String {
+         let placemark = mapItem.placemark
+         var addressString = ""
+         
+         if placemark.subThoroughfare != nil {
+             addressString = placemark.subThoroughfare! + " "
+         }
+         if placemark.thoroughfare != nil {
+             addressString += placemark.thoroughfare! + ", "
+         }
+         if placemark.postalCode != nil {
+             addressString += placemark.postalCode! + " "
+         }
+         if placemark.locality != nil {
+             addressString += placemark.locality! + ", "
+         }
+         if placemark.administrativeArea != nil {
+             addressString += placemark.administrativeArea! + " "
+         }
+         if placemark.country != nil {
+             addressString += placemark.country!
+         }
+         return addressString
+     }
+ }
+ */

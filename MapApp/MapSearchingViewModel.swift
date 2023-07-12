@@ -29,7 +29,7 @@ class MapSearchingViewModel: NSObject, ObservableObject, CLLocationManagerDelega
         case .restricted:
             print("Onayla dövmeyim")
         case .denied:
-            print("Son şansın")
+            print("Sen bilirsin")
         case .authorizedAlways, .authorizedWhenInUse, .authorized:
             locationManager.startUpdatingLocation()
         @unknown default:
@@ -40,16 +40,19 @@ class MapSearchingViewModel: NSObject, ObservableObject, CLLocationManagerDelega
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let firstLocation = locations.first else { return }
         
-//        print(firstLocation.coordinate)
+        //        print(firstLocation.coordinate)
         self.currentLocation = firstLocation.coordinate
     }
     
     override init() {
         super.init()
-       cancellable =  $searchQuery.debounce(for: .milliseconds(500), scheduler: RunLoop.main)
-            .sink { [weak self]searchTerm in
-                self?.performSearch(for: searchTerm)
-            }
+        
+        if searchQuery.count < 3 {
+            cancellable =  $searchQuery
+                .sink { [weak self] searchTerm in
+                    self?.performSearch(for: searchTerm)
+                }
+        }
         
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
@@ -66,9 +69,8 @@ class MapSearchingViewModel: NSObject, ObservableObject, CLLocationManagerDelega
         
         let request = MKLocalSearch.Request()
         request.naturalLanguageQuery = query
-        if let region = self.region {
-            request.region = region
-        }
+        guard let region = region else { return }
+        request.region = region
         let localSearch = MKLocalSearch(request: request)
         localSearch.start { resp, error in
             if let error = error {
@@ -94,5 +96,5 @@ class MapSearchingViewModel: NSObject, ObservableObject, CLLocationManagerDelega
             self.annotations = airportAnnotataions
         }
     }
-
+    
 }
